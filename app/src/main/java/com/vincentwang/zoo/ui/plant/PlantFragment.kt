@@ -1,60 +1,60 @@
 package com.vincentwang.zoo.ui.plant
 
 import android.os.Bundle
+import android.os.Parcelable
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.vincentwang.zoo.R
+import com.vincentwang.zoo.base.BaseFragment
+import com.vincentwang.zoo.databinding.FragmentIntroBinding
+import com.vincentwang.zoo.databinding.FragmentPlantBinding
+import com.vincentwang.zoo.ui.intro.IntroVM
+import kotlinx.android.parcel.Parcelize
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class PlantFragment : BaseFragment() {
+    lateinit var binding: FragmentPlantBinding
+    private val vm by viewModel<PlantVM>()
 
-/**
- * A simple [Fragment] subclass.
- * Use the [PlantFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class PlantFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    companion object {
+        const val ARGUMENT_PLANT_FRAG_DATA = "argPlantFragData"
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+        fun newInstance(fragData: PlantFragData): PlantFragment {
+            val fragment = PlantFragment()
+            val args = Bundle()
+            args.putParcelable(ARGUMENT_PLANT_FRAG_DATA, fragData)
+            fragment.arguments = args
+            return fragment
         }
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_plant, container, false)
+        binding = FragmentPlantBinding.inflate(inflater, container, false).apply {
+            vm = this@PlantFragment.vm
+            lifecycleOwner = this@PlantFragment
+        }
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment PlantFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            PlantFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        getBundle()
+    }
+
+    fun getBundle() {
+        arguments?.apply {
+            vm.getData(getParcelable(ARGUMENT_PLANT_FRAG_DATA))
+        }
     }
 }
+
+@Parcelize
+data class PlantFragData(
+    val data: PlantData
+) : Parcelable

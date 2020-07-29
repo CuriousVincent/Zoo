@@ -4,10 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
 import com.vincentwang.zoo.R
 import com.vincentwang.zoo.base.BaseFragment
 import com.vincentwang.zoo.databinding.FragmentIntroBinding
+import com.vincentwang.zoo.ui.plant.PlantFragData
+import com.vincentwang.zoo.ui.plant.PlantFragment
+import com.vincentwang.zoo.util.startFragment
+import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.fragment_intro.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -42,5 +47,17 @@ class IntroFragment : BaseFragment() {
                 }
             }
         })
+        vm.goPlantFragment.observe(this, Observer {
+            startFragment(R.id.container,this,PlantFragment.newInstance(PlantFragData(it)))
+        })
+
+        vm.showErrorDialog.observe(this,Observer{
+            val builder: AlertDialog.Builder = AlertDialog.Builder(act)
+            builder.setMessage("API ERROR")
+            builder.setTitle("API ERROR")
+            val dialog = builder.create()
+            dialog.show()
+        })
+
     }
 }

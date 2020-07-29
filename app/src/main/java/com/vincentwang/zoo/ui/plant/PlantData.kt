@@ -1,19 +1,24 @@
 package com.vincentwang.zoo.ui.plant
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class PlantData(
-    val result: Result
-)
+    val result: Result?
+): Parcelable
 
+@Parcelize
 data class Result(
     val count: Int,
     val limit: Int,
     val offset: Int,
     val results: List<ResultX>,
     val sort: String
-)
+):Parcelable
 
+@Parcelize
 data class ResultX(
     val F_AlsoKnown: String,
     val F_Brief: String,
@@ -53,4 +58,4 @@ data class ResultX(
     val _id: Int,
     @SerializedName(" F_Name_Ch")
     val F_Name_Ch: String
-)
+):Parcelable
