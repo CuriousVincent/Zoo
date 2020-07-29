@@ -18,7 +18,6 @@ import com.vincentwang.zoo.util.loadFromUrl
  * TODO: Replace the implementation with code for your data type.
  */
 class IntroListAdapter(
-    private val context:Context?,
     private val values: IntroData,
     private val itemClick: ((view:View,position:Int) -> Unit)? = null
 ) : RecyclerView.Adapter<BindingHolder>() {
@@ -35,17 +34,6 @@ class IntroListAdapter(
             when(this){
                 is ItemIntroBinding -> {
                     vm = IntroItemVM(item)
-//                    context?.apply {
-//                        val circularProgressDrawable = CircularProgressDrawable(this)
-//                        circularProgressDrawable.strokeWidth = 5f
-//                        circularProgressDrawable.centerRadius = 30f
-//                        circularProgressDrawable.start()
-//                        Glide.with(this)
-//                            .load("https://www.zoo.gov.tw/iTAP/05_Exhibit/01_FormosanAnimal.jpg")
-////                            .load("https://lh6.ggpht.com/9SZhHdv4URtBzRmXpnWxZcYhkgTQurFuuQ8OR7WZ3R7fyTmha77dYkVvcuqMu3DLvMQ=w300")
-//                            .placeholder(circularProgressDrawable)
-//                            .into(image)
-//                    }
                     itemClick?.invoke(itemContainer, position)
                 }
             }

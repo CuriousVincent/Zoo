@@ -2,6 +2,7 @@ package com.vincentwang.zoo.ui.intro
 
 
 import androidx.lifecycle.viewModelScope
+import com.orhanobut.logger.Logger
 import com.vincentwang.zoo.base.BaseVM
 import com.vincentwang.zoo.model.ZooRepository
 import com.vincentwang.zoo.util.CoroutineDispatcherProvider
@@ -27,13 +28,35 @@ class IntroVM(
         isLoading.postValue(true)
         viewModelScope.launch {
             repo.getIntro()
-                .flowOn(Dispatchers.IO)
-                .catch { isLoading.postValue(false) }
+                .flowOn(dispatchers.io())
+                .catch {
+                    isLoading.postValue(false) }
                 .collect {
                     setAdapter.postValue(it)
                     isLoading.postValue(false)
                 }
         }
 
+    }
+
+    fun getPlant(num: Int) {
+        isLoading.postValue(true)
+        viewModelScope.launch {
+            repo.getPlant(num)
+                .flowOn(dispatchers.io())
+                .catch {e->
+                    System.out.println(e.message)
+                    isLoading.postValue(false)
+                }
+                .collect{
+                    System.out.println(it.toString())
+//                    if(it.data!= null){
+//                        Logger.wtf(it.data.result.results[0].F_Location)
+//                    }else{
+//                        Logger.wtf("Fail")
+//                    }
+                    isLoading.postValue(false)
+                }
+        }
     }
 }

@@ -36,7 +36,11 @@ class IntroFragment : BaseFragment() {
 //        act.supportActionBar?.setDisplayHomeAsUpEnabled(true)
 //        act.supportActionBar?.setDisplayShowHomeEnabled(true)
         vm.setAdapter.observe(this, Observer {
-            binding.introList.adapter = IntroListAdapter(context,it)
+            binding.introList.adapter = IntroListAdapter(it) { view,position->
+                view.setOnClickListener {
+                    vm.getPlant(position)
+                }
+            }
         })
     }
 }
