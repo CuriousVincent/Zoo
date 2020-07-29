@@ -1,4 +1,4 @@
-package com.vincentwang.zoo.ui
+package com.vincentwang.zoo.ui.intro
 
 data class IntroData(
     val results: List<Result>

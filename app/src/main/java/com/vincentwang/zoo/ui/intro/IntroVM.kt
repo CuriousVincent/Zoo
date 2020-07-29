@@ -1,4 +1,4 @@
-package com.vincentwang.zoo.ui
+package com.vincentwang.zoo.ui.intro
 
 import androidx.lifecycle.ViewModel
 
