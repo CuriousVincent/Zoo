@@ -1,5 +1,6 @@
 package com.vincentwang.zoo.ui.intro
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,7 @@ import com.vincentwang.zoo.ui.plant.PlantFragment
 import com.vincentwang.zoo.util.startFragment
 import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.fragment_intro.*
+import kotlinx.android.synthetic.main.item_intro.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
@@ -21,7 +23,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
  */
 class IntroFragment : BaseFragment() {
 
-    lateinit var binding : FragmentIntroBinding
+    lateinit var binding: FragmentIntroBinding
     private val vm by viewModel<IntroVM>()
 
     override fun onCreateView(
@@ -38,23 +40,23 @@ class IntroFragment : BaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         act.setSupportActionBar(toolbar)
-//        act.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-//        act.supportActionBar?.setDisplayShowHomeEnabled(true)
+
         vm.setAdapter.observe(this, Observer {
-            binding.introList.adapter = IntroListAdapter(it) { view,position->
+            binding.introList.adapter = IntroListAdapter(it) { view, position ->
                 view.setOnClickListener {
                     vm.getPlant(position)
                 }
             }
         })
         vm.goPlantFragment.observe(this, Observer {
-            startFragment(R.id.container,this,PlantFragment.newInstance(PlantFragData(it)))
+            startFragment(R.id.container, this, PlantFragment.newInstance(it))
         })
 
-        vm.showErrorDialog.observe(this,Observer{
+        vm.showErrorDialog.observe(this, Observer {
             val builder: AlertDialog.Builder = AlertDialog.Builder(act)
             builder.setMessage("API ERROR")
             builder.setTitle("API ERROR")
+            builder.setPositiveButton("Confirm") { dialog, which -> dialog.dismiss() }
             val dialog = builder.create()
             dialog.show()
         })

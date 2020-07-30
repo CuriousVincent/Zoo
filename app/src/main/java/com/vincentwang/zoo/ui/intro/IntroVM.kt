@@ -6,6 +6,7 @@ import com.orhanobut.logger.Logger
 import com.vincentwang.zoo.base.BaseVM
 import com.vincentwang.zoo.model.ZooRepository
 import com.vincentwang.zoo.ui.plant.PlantData
+import com.vincentwang.zoo.ui.plant.PlantFragData
 import com.vincentwang.zoo.util.CoroutineDispatcherProvider
 import com.vincentwang.zoo.util.SingleLiveEvent
 import kotlinx.coroutines.Dispatchers
@@ -20,9 +21,9 @@ class IntroVM(
 ) : BaseVM() {
 
     val setAdapter = SingleLiveEvent<IntroData>()
-    val goPlantFragment = SingleLiveEvent<PlantData>()
+    val goPlantFragment = SingleLiveEvent<PlantFragData>()
     val showErrorDialog = SingleLiveEvent<Unit>()
-
+    lateinit var data: IntroData
     init {
         showList()
     }
@@ -35,7 +36,8 @@ class IntroVM(
                 .catch {
                     isLoading.postValue(false) }
                 .collect {
-                    setAdapter.postValue(it)
+                    data = it
+                    setAdapter.postValue(data)
                     isLoading.postValue(false)
                 }
         }
@@ -53,7 +55,7 @@ class IntroVM(
                 }
                 .collect{
                     if(it.result != null){
-                        goPlantFragment.postValue(it)
+                        goPlantFragment.postValue(PlantFragData(it, data.results[num]))
                     }else{
                         showErrorDialog.postValue(Unit)
                     }

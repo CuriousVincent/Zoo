@@ -1,18 +1,21 @@
 package com.vincentwang.zoo.ui.plant
 
+import android.R
 import android.os.Bundle
 import android.os.Parcelable
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import com.vincentwang.zoo.R
+import androidx.activity.OnBackPressedCallback
+import androidx.lifecycle.Observer
 import com.vincentwang.zoo.base.BaseFragment
-import com.vincentwang.zoo.databinding.FragmentIntroBinding
 import com.vincentwang.zoo.databinding.FragmentPlantBinding
-import com.vincentwang.zoo.ui.intro.IntroVM
+import com.vincentwang.zoo.ui.intro.Result
 import kotlinx.android.parcel.Parcelize
+import kotlinx.android.synthetic.main.fragment_intro.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import kotlin.concurrent.fixedRateTimer
 
 class PlantFragment : BaseFragment() {
     lateinit var binding: FragmentPlantBinding
@@ -44,17 +47,30 @@ class PlantFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        act.setSupportActionBar(toolbar)
+        toolbar.setNavigationOnClickListener(View.OnClickListener {
+            parentFragmentManager.popBackStack()
+        })
+        act.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        act.supportActionBar?.setDisplayShowHomeEnabled(true)
         getBundle()
+        initView()
     }
 
-    fun getBundle() {
+    private fun getBundle() {
         arguments?.apply {
             vm.getData(getParcelable(ARGUMENT_PLANT_FRAG_DATA))
         }
+    }
+    private fun initView(){
+        vm.setTitle.observe(this, Observer {
+            toolbar.title = it
+        })
     }
 }
 
 @Parcelize
 data class PlantFragData(
-    val data: PlantData
+    val plantData: PlantData,
+    val introData:Result
 ) : Parcelable

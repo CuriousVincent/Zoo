@@ -13,7 +13,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.plant.PlantFragment">
-
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        app:theme="@style/ToolbarTheme"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:titleTextColor="#FFFFFF" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

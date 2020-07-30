@@ -1,9 +1,12 @@
 package com.vincentwang.zoo.ui.intro
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+@Parcelize
 data class IntroData(
     val results: List<Result>
-)
-
+):Parcelable
+@Parcelize
 data class Result(
     val E_Category: String,
     val E_Geo: String,
@@ -13,4 +16,4 @@ data class Result(
     val E_Pic_URL: String,
     val E_URL: String,
     val E_no: String
-)
+):Parcelable
