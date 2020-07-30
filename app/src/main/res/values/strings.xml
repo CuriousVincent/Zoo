@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Zoo</string>
+    <string name="go_web">前往網站</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="nickname">別名</string>
+    <string name="intro">簡介</string>
+    <string name="feature">辨認方式</string>
+    <string name="function">功能性</string>
 </resources>

@@ -1,21 +1,21 @@
 package com.vincentwang.zoo.ui.plant
 
-import android.R
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.Observer
+import com.vincentwang.zoo.R
 import com.vincentwang.zoo.base.BaseFragment
 import com.vincentwang.zoo.databinding.FragmentPlantBinding
 import com.vincentwang.zoo.ui.intro.Result
+import com.vincentwang.zoo.ui.plant_detail.PlantDetailFragment
+import com.vincentwang.zoo.util.startCustomTabsIntent
+import com.vincentwang.zoo.util.startFragment
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_intro.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import kotlin.concurrent.fixedRateTimer
 
 class PlantFragment : BaseFragment() {
     lateinit var binding: FragmentPlantBinding
@@ -48,9 +48,9 @@ class PlantFragment : BaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         act.setSupportActionBar(toolbar)
-        toolbar.setNavigationOnClickListener(View.OnClickListener {
+        toolbar.setNavigationOnClickListener{
             parentFragmentManager.popBackStack()
-        })
+        }
         act.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         act.supportActionBar?.setDisplayShowHomeEnabled(true)
         getBundle()
@@ -62,9 +62,31 @@ class PlantFragment : BaseFragment() {
             vm.getData(getParcelable(ARGUMENT_PLANT_FRAG_DATA))
         }
     }
-    private fun initView(){
+
+    private fun initView() {
         vm.setTitle.observe(this, Observer {
             toolbar.title = it
+        })
+        vm.setAdapter.observe(this, Observer {
+            binding.plantList.adapter = PlantAdapter(it) { view, position ->
+                setOnClickListener(view) {
+                    when (view.id) {
+                        R.id.web -> {
+                            vm.getShowWeb(position)
+                        }
+                        R.id.itemContainer -> {
+                            vm.goDetail(position)
+                        }
+                    }
+                }
+
+            }
+        })
+        vm.showWebView.observe(this, Observer {
+            context?.startCustomTabsIntent(it)
+        })
+        vm.goPlantDetail.observe(this, Observer {
+            startFragment(R.id.container, this, PlantDetailFragment.newInstance(it))
         })
     }
 }
@@ -72,5 +94,5 @@ class PlantFragment : BaseFragment() {
 @Parcelize
 data class PlantFragData(
     val plantData: PlantData,
-    val introData:Result
+    val introData: Result
 ) : Parcelable

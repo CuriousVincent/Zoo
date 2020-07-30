@@ -43,7 +43,7 @@ class IntroFragment : BaseFragment() {
 
         vm.setAdapter.observe(this, Observer {
             binding.introList.adapter = IntroListAdapter(it) { view, position ->
-                view.setOnClickListener {
+                setOnClickListener(view){
                     vm.getPlant(position)
                 }
             }

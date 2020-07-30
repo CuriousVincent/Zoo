@@ -56,6 +56,6 @@ data class ResultX(
     val F_pdf02_ALT: String,
     val F_pdf02_URL: String,
     val _id: Int,
-    @SerializedName(" F_Name_Ch")
+    @SerializedName("F_Name_Ch")
     val F_Name_Ch: String
 ):Parcelable
