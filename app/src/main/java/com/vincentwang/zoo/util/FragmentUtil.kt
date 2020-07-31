@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.fragment.app.FragmentTransaction
 import com.orhanobut.logger.Logger
 import com.vincentwang.zoo.R
 
@@ -22,7 +23,7 @@ fun AppCompatActivity.startFragment(@IdRes containerId: Int, fragment: Fragment)
 }
 
 fun Fragment.startFragment(@IdRes containerId: Int, fragment: Fragment, isAddToBackStack: Boolean = true) {
-    parentFragmentManager.beginTransaction()?.apply {
+    parentFragmentManager.beginTransaction().apply {
         add(containerId, fragment)
         if (isAddToBackStack) {
             addToBackStack(null)
@@ -31,8 +32,9 @@ fun Fragment.startFragment(@IdRes containerId: Int, fragment: Fragment, isAddToB
     }
 }
 
-fun Fragment.startFragment(@IdRes containerId: Int, current: Fragment, target: Fragment) {
-    parentFragmentManager.beginTransaction()?.apply {
+fun Fragment.startFragment(@IdRes containerId: Int, current: Fragment, target: Fragment,transactionType: TransactionType = TransactionType.PUSH) {
+    parentFragmentManager.beginTransaction().apply {
+        transactionType.setCustomAnimations(this)
         if (!target.isAdded) {
             hide(current)
             add(containerId, target)
@@ -81,6 +83,31 @@ fun Context.startCustomTabsIntent(url: String) {
         customTabsIntent.launchUrl(this, Uri.parse(url))
     } catch (e: ActivityNotFoundException) {
         Logger.wtf("No Browser")
+    }
+
+}
+
+enum class TransactionType {
+    PUSH, PRESENT, NONE;
+
+    fun setCustomAnimations(ft: FragmentTransaction) {
+        when (this) {
+            PUSH -> ft.setCustomAnimations(
+                R.anim.fragment_slide_left_enter,
+                R.anim.fragment_slide_left_exit,
+                R.anim.fragment_slide_right_enter,
+                R.anim.fragment_slide_right_exit
+            )
+            PRESENT -> ft.setCustomAnimations(
+                R.anim.fragment_slide_bottom_enter,
+                R.anim.fragment_slide_bottom_exit,
+                R.anim.fragment_slide_top_enter,
+                R.anim.fragment_slide_top_exit
+            )
+            NONE -> {
+
+            }
+        }
     }
 
 }
