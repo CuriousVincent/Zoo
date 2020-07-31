@@ -7,5 +7,6 @@ data class IntroItemVM(
 ){
     val title = MutableLiveData<String>(results.E_Name)
     val info = MutableLiveData<String>(results.E_Info)
-
+    val openTime = MutableLiveData<String>(results.E_Memo)
+    val url = MutableLiveData<String>(results.E_Pic_URL)
 }

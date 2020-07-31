@@ -35,7 +35,7 @@ data class ResultX(
     val F_Name_En: String,
     val F_Name_Latin: String,
     val F_Pic01_ALT: String,
-    val F_Pic01_URL: String,
+    val F_Pic01_URL: String?,
     val F_Pic02_ALT: String,
     val F_Pic02_URL: String,
     val F_Pic03_ALT: String,

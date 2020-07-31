@@ -25,7 +25,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp">
-
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="100dp"
+                android:layout_height="0dp"
+                app:src="@{vm.url}"
+                android:transitionName="image"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                />
             <TextView
                 android:id="@+id/title"
                 android:layout_width="wrap_content"
@@ -34,7 +43,7 @@
                 android:text="@{vm.title}"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toTopOf="@id/info"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@id/image"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="臺灣動物區" />
 
@@ -45,21 +54,32 @@
                 android:maxLines="2"
                 android:padding="6dp"
                 android:text="@{vm.info}"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/openTime"
                 app:layout_constraintEnd_toStartOf="@+id/next"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@id/image"
                 app:layout_constraintTop_toBottomOf="@+id/title"
                 tools:text="臺灣動物區以臺灣原生動物與棲息環境為展示重點，佈置模擬動物原生棲地之生態環境，讓動物表現如野外般自然的生活習性，引導觀賞者更正確地認識本土野生動物。臺灣位處於亞熱帶，雨量充沛、氣候溫暖，擁有各種地形景觀，因而孕育了豐富龐雜的生物資源。" />
-
+            <TextView
+                android:id="@+id/openTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="6dp"
+                app:layout_constraintStart_toEndOf="@id/image"
+                app:layout_constraintTop_toBottomOf="@+id/info"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:text="@{vm.openTime}"
+                tools:text="週一到週日"
+                />
             <ImageView
                 android:id="@+id/next"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_baseline_arrow_forward_ios_24"
-                app:layout_constraintBottom_toBottomOf="@id/info"
+                app:layout_constraintBottom_toBottomOf="@id/openTime"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/info"
-                app:layout_constraintTop_toTopOf="@id/title" />
+                app:layout_constraintTop_toTopOf="@id/title"
+                />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
