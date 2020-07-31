@@ -5,6 +5,7 @@ import com.vincentwang.zoo.ui.intro.Result
 data class PlantListItemVM(val data : ResultX){
     val title:String = data.F_Name_En
     val info:String = data.F_AlsoKnown
+    val url:String = data.F_Pic01_URL ?: "http://www.zoo.gov.tw/iTAP/04_Plant/Lythraceae/subcostata/subcostata_1.jpg"
 }
 
 data class PlantAreaItemVM(val data:Result){
