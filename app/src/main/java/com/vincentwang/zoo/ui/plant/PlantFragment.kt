@@ -1,21 +1,28 @@
 package com.vincentwang.zoo.ui.plant
 
+import android.app.SharedElementCallback
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.RecyclerView
+import androidx.transition.TransitionInflater
 import com.vincentwang.zoo.R
 import com.vincentwang.zoo.base.BaseFragment
 import com.vincentwang.zoo.databinding.FragmentPlantBinding
+import com.vincentwang.zoo.ui.MainActivity
 import com.vincentwang.zoo.ui.intro.Result
+import com.vincentwang.zoo.ui.plant_detail.PlantDetailFragData
 import com.vincentwang.zoo.ui.plant_detail.PlantDetailFragment
 import com.vincentwang.zoo.util.startCustomTabsIntent
 import com.vincentwang.zoo.util.startFragment
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_intro.*
+import kotlinx.android.synthetic.main.item_plant_list.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
+
 
 class PlantFragment : BaseFragment() {
     lateinit var binding: FragmentPlantBinding
@@ -48,7 +55,7 @@ class PlantFragment : BaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         act.setSupportActionBar(toolbar)
-        toolbar.setNavigationOnClickListener{
+        toolbar.setNavigationOnClickListener {
             parentFragmentManager.popBackStack()
         }
         act.supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -75,7 +82,29 @@ class PlantFragment : BaseFragment() {
                             vm.getShowWeb(position)
                         }
                         R.id.itemContainer -> {
-                            vm.goDetail(position)
+                            sharedElementReturnTransition = TransitionInflater.from(act)
+                                .inflateTransition(R.transition.change_image_transform)
+                            exitTransition = TransitionInflater.from(act)
+                                .inflateTransition(android.R.transition.explode)
+//                            setExitSharedElementCallback(
+//
+//                            )
+
+                            val fragment = PlantDetailFragment.newInstance(
+                                PlantDetailFragData((vm.dataList[position] as PlantListItemData).data)
+                            )
+                            fragment.sharedElementEnterTransition =
+                                TransitionInflater.from(activity)
+                                    .inflateTransition(R.transition.change_image_transform);
+                            fragment.enterTransition = TransitionInflater.from(act)
+                                .inflateTransition(android.R.transition.explode);
+                            parentFragmentManager.beginTransaction()
+                                .hide(this)
+                                .addSharedElement(view.image, "image")
+                                .addToBackStack(null)
+                                .add(R.id.container, fragment)
+                                .commit()
+//                            vm.goDetail(position)
                         }
                     }
                 }
