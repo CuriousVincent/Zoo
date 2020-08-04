@@ -1,18 +1,16 @@
 package com.vincentwang.zoo.ui.plant
 
-import android.app.SharedElementCallback
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.SharedElementCallback
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.TransitionInflater
 import com.vincentwang.zoo.R
 import com.vincentwang.zoo.base.BaseFragment
 import com.vincentwang.zoo.databinding.FragmentPlantBinding
-import com.vincentwang.zoo.ui.MainActivity
 import com.vincentwang.zoo.ui.intro.Result
 import com.vincentwang.zoo.ui.plant_detail.PlantDetailFragData
 import com.vincentwang.zoo.ui.plant_detail.PlantDetailFragment
@@ -85,22 +83,20 @@ class PlantFragment : BaseFragment() {
                             sharedElementReturnTransition = TransitionInflater.from(act)
                                 .inflateTransition(R.transition.change_image_transform)
                             exitTransition = TransitionInflater.from(act)
-                                .inflateTransition(android.R.transition.explode)
-//                            setExitSharedElementCallback(
-//
-//                            )
+                                .inflateTransition(R.transition.exit_transition)
 
                             val fragment = PlantDetailFragment.newInstance(
                                 PlantDetailFragData((vm.dataList[position] as PlantListItemData).data)
                             )
-                            fragment.sharedElementEnterTransition =
-                                TransitionInflater.from(activity)
-                                    .inflateTransition(R.transition.change_image_transform);
-                            fragment.enterTransition = TransitionInflater.from(act)
-                                .inflateTransition(android.R.transition.explode);
+//                            fragment.sharedElementEnterTransition =
+//                                TransitionInflater.from(activity)
+//                                    .inflateTransition(R.transition.change_image_transform);
+//                            fragment.enterTransition = TransitionInflater.from(act)
+//                                .inflateTransition(android.R.transition.explode)
                             parentFragmentManager.beginTransaction()
+                                .setReorderingAllowed(true)
                                 .hide(this)
-                                .addSharedElement(view.image, "image")
+                                .addSharedElement(view.image,(vm.dataList[position] as PlantListItemData).data.F_Pic01_URL?:"" )
                                 .addToBackStack(null)
                                 .add(R.id.container, fragment)
                                 .commit()
