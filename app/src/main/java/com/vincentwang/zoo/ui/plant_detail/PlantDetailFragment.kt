@@ -1,11 +1,16 @@
 package com.vincentwang.zoo.ui.plant_detail
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.transition.TransitionInflater
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.vincentwang.zoo.R
 import com.vincentwang.zoo.base.BaseFragment
 import com.vincentwang.zoo.databinding.FragmentPlantDetailBinding
@@ -14,12 +19,10 @@ import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_intro.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-
 class PlantDetailFragment : BaseFragment() {
     lateinit var binding: FragmentPlantDetailBinding
 
-        private val vm by viewModel<PlantDetailVM>()
-
+    private val vm by viewModel<PlantDetailVM>()
 
 
     companion object {
@@ -27,7 +30,7 @@ class PlantDetailFragment : BaseFragment() {
         fun newInstance(fragData: PlantDetailFragData): PlantDetailFragment {
             val fragment = PlantDetailFragment()
             val args = Bundle()
-            args.putParcelable(PlantDetailFragment.ARGUMENT_PLANT_DETAIL_FRAG_DATA, fragData)
+            args.putParcelable(ARGUMENT_PLANT_DETAIL_FRAG_DATA, fragData)
             fragment.arguments = args
             return fragment
         }
@@ -35,7 +38,10 @@ class PlantDetailFragment : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(R.transition.change_image_transform)
+        sharedElementEnterTransition =
+            TransitionInflater.from(context).inflateTransition(R.transition.change_image_transform)
+        sharedElementReturnTransition =
+            TransitionInflater.from(act).inflateTransition(R.transition.change_image_transform)
     }
 
 
@@ -47,6 +53,7 @@ class PlantDetailFragment : BaseFragment() {
             vm = this@PlantDetailFragment.vm
             lifecycleOwner = this@PlantDetailFragment
         }
+        postponeEnterTransition()
         return binding.root
     }
 
@@ -58,15 +65,32 @@ class PlantDetailFragment : BaseFragment() {
         }
         act.supportActionBar?.setDisplayHomeAsUpEnabled(true)
         act.supportActionBar?.setDisplayShowHomeEnabled(true)
-        arguments?.apply {
-
-            val data: PlantDetailFragData? =
-                getParcelable(PlantDetailFragment.ARGUMENT_PLANT_DETAIL_FRAG_DATA)
-            data?.apply {
+        arguments?.getParcelable<PlantDetailFragData>(ARGUMENT_PLANT_DETAIL_FRAG_DATA)
+            ?.apply {
                 toolbar.title = this.data.F_Name_En
-                vm.setData(this)
+                vm.setData(this, object : RequestListener<Drawable?> {
+                    override fun onLoadFailed(
+                        e: GlideException?,
+                        model: Any,
+                        target: Target<Drawable?>,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        startPostponedEnterTransition()
+                        return false
+                    }
+
+                    override fun onResourceReady(
+                        resource: Drawable?,
+                        model: Any,
+                        target: Target<Drawable?>,
+                        dataSource: DataSource,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        startPostponedEnterTransition()
+                        return false
+                    }
+                })
             }
-        }
     }
 
 }

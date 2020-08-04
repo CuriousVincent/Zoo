@@ -40,7 +40,9 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/toolbar"
-                app:src="@{vm.url}" />
+                app:url="@{vm.url}"
+                app:listener="@{vm.getRequestListener()}"
+                />
 
             <TextView
                 android:id="@+id/name"

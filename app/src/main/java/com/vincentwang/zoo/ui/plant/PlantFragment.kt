@@ -5,7 +5,6 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.app.SharedElementCallback
 import androidx.lifecycle.Observer
 import androidx.transition.TransitionInflater
 import com.vincentwang.zoo.R
@@ -37,7 +36,15 @@ class PlantFragment : BaseFragment() {
             return fragment
         }
     }
-
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        sharedElementReturnTransition = TransitionInflater.from(act)
+            .inflateTransition(R.transition.change_image_transform)
+        sharedElementEnterTransition = TransitionInflater.from(act)
+            .inflateTransition(R.transition.change_image_transform)
+        exitTransition = TransitionInflater.from(act)
+            .inflateTransition(R.transition.exit_transition)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,6 +54,7 @@ class PlantFragment : BaseFragment() {
             vm = this@PlantFragment.vm
             lifecycleOwner = this@PlantFragment
         }
+
         return binding.root
     }
 
@@ -80,27 +88,7 @@ class PlantFragment : BaseFragment() {
                             vm.getShowWeb(position)
                         }
                         R.id.itemContainer -> {
-                            sharedElementReturnTransition = TransitionInflater.from(act)
-                                .inflateTransition(R.transition.change_image_transform)
-                            exitTransition = TransitionInflater.from(act)
-                                .inflateTransition(R.transition.exit_transition)
-
-                            val fragment = PlantDetailFragment.newInstance(
-                                PlantDetailFragData((vm.dataList[position] as PlantListItemData).data)
-                            )
-//                            fragment.sharedElementEnterTransition =
-//                                TransitionInflater.from(activity)
-//                                    .inflateTransition(R.transition.change_image_transform);
-//                            fragment.enterTransition = TransitionInflater.from(act)
-//                                .inflateTransition(android.R.transition.explode)
-                            parentFragmentManager.beginTransaction()
-                                .setReorderingAllowed(true)
-                                .hide(this)
-                                .addSharedElement(view.image,(vm.dataList[position] as PlantListItemData).data.F_Pic01_URL?:"" )
-                                .addToBackStack(null)
-                                .add(R.id.container, fragment)
-                                .commit()
-//                            vm.goDetail(position)
+                            vm.goDetail(view.image,position)
                         }
                     }
                 }
@@ -110,8 +98,18 @@ class PlantFragment : BaseFragment() {
         vm.showWebView.observe(this, Observer {
             context?.startCustomTabsIntent(it)
         })
-        vm.goPlantDetail.observe(this, Observer {
-            startFragment(R.id.container, this, PlantDetailFragment.newInstance(it))
+        vm.goPlantDetail.observe(this, Observer {pair->
+            val fragData = pair.second
+            val imageView = pair.first
+            parentFragmentManager.beginTransaction()
+                .setReorderingAllowed(true)
+                .addSharedElement(imageView,fragData.data.F_Pic01_URL?:"http://www.zoo.gov.tw/iTAP/04_Plant/Lythraceae/subcostata/subcostata_1.jpg" )
+                .addToBackStack(null)
+                .add(R.id.container, PlantDetailFragment.newInstance(
+                    fragData
+                ), PlantDetailFragment::class.java.simpleName)
+                .hide(this)
+                .commit()
         })
     }
 }

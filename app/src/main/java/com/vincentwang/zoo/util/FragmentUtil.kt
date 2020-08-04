@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.widget.ImageView
 import androidx.annotation.IdRes
@@ -14,8 +15,13 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.fragment.app.FragmentTransaction
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.orhanobut.logger.Logger
 import com.vincentwang.zoo.R
+import kotlinx.android.synthetic.main.fragment_plant_detail.view.*
 
 fun AppCompatActivity.startFragment(@IdRes containerId: Int, fragment: Fragment) {
     supportFragmentManager.beginTransaction()
@@ -58,6 +64,17 @@ fun ImageView.loadFromUrl(url: String) {
     Glide.with(this.context.applicationContext)
         .load(url)
         .placeholder(circularProgressDrawable)
+        .into(this)
+}
+fun ImageView.loadFromUrlWithAnim(url: String,listener: RequestListener<Drawable?>) {
+    val circularProgressDrawable = CircularProgressDrawable(this.context.applicationContext)
+    circularProgressDrawable.strokeWidth = 5f
+    circularProgressDrawable.centerRadius = 30f
+    circularProgressDrawable.start()
+    Glide.with(this.context.applicationContext)
+        .load(url)
+        .placeholder(circularProgressDrawable)
+        .listener(listener)
         .into(this)
 }
 
