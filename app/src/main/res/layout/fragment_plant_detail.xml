@@ -34,12 +34,15 @@
                 android:id="@+id/image"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
+                android:transitionName="@{vm.url}"
                 android:scaleType="fitXY"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/toolbar"
-                app:src="@{vm.url}" />
+                app:url="@{vm.url}"
+                app:listener="@{vm.getRequestListener()}"
+                />
 
             <TextView
                 android:id="@+id/name"

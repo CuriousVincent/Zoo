@@ -6,16 +6,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import androidx.transition.TransitionInflater
 import com.vincentwang.zoo.R
 import com.vincentwang.zoo.base.BaseFragment
 import com.vincentwang.zoo.databinding.FragmentPlantBinding
 import com.vincentwang.zoo.ui.intro.Result
+import com.vincentwang.zoo.ui.plant_detail.PlantDetailFragData
 import com.vincentwang.zoo.ui.plant_detail.PlantDetailFragment
 import com.vincentwang.zoo.util.startCustomTabsIntent
 import com.vincentwang.zoo.util.startFragment
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_intro.*
+import kotlinx.android.synthetic.main.item_plant_list.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
+
 
 class PlantFragment : BaseFragment() {
     lateinit var binding: FragmentPlantBinding
@@ -32,7 +36,15 @@ class PlantFragment : BaseFragment() {
             return fragment
         }
     }
-
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        sharedElementReturnTransition = TransitionInflater.from(act)
+            .inflateTransition(R.transition.change_image_transform)
+        sharedElementEnterTransition = TransitionInflater.from(act)
+            .inflateTransition(R.transition.change_image_transform)
+        exitTransition = TransitionInflater.from(act)
+            .inflateTransition(R.transition.exit_transition)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,13 +54,14 @@ class PlantFragment : BaseFragment() {
             vm = this@PlantFragment.vm
             lifecycleOwner = this@PlantFragment
         }
+
         return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         act.setSupportActionBar(toolbar)
-        toolbar.setNavigationOnClickListener{
+        toolbar.setNavigationOnClickListener {
             parentFragmentManager.popBackStack()
         }
         act.supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -75,7 +88,7 @@ class PlantFragment : BaseFragment() {
                             vm.getShowWeb(position)
                         }
                         R.id.itemContainer -> {
-                            vm.goDetail(position)
+                            vm.goDetail(view.image,position)
                         }
                     }
                 }
@@ -85,8 +98,18 @@ class PlantFragment : BaseFragment() {
         vm.showWebView.observe(this, Observer {
             context?.startCustomTabsIntent(it)
         })
-        vm.goPlantDetail.observe(this, Observer {
-            startFragment(R.id.container, this, PlantDetailFragment.newInstance(it))
+        vm.goPlantDetail.observe(this, Observer {pair->
+            val fragData = pair.second
+            val imageView = pair.first
+            parentFragmentManager.beginTransaction()
+                .setReorderingAllowed(true)
+                .addSharedElement(imageView,fragData.data.F_Pic01_URL?:"http://www.zoo.gov.tw/iTAP/04_Plant/Lythraceae/subcostata/subcostata_1.jpg" )
+                .addToBackStack(null)
+                .add(R.id.container, PlantDetailFragment.newInstance(
+                    fragData
+                ), PlantDetailFragment::class.java.simpleName)
+                .hide(this)
+                .commit()
         })
     }
 }

@@ -1,5 +1,6 @@
 package com.vincentwang.zoo.ui.plant
 
+import android.widget.ImageView
 import com.vincentwang.zoo.base.BaseVM
 import com.vincentwang.zoo.ui.plant_detail.PlantDetailFragData
 import com.vincentwang.zoo.util.SingleLiveEvent
@@ -9,7 +10,7 @@ class PlantVM: BaseVM() {
     val setTitle = SingleLiveEvent<String>()
     val setAdapter = SingleLiveEvent<List<BaseItemData>>()
     val showWebView = SingleLiveEvent<String>()
-    val goPlantDetail = SingleLiveEvent<PlantDetailFragData>()
+    val goPlantDetail = SingleLiveEvent<Pair<ImageView,PlantDetailFragData>>()
 
     var dataList = ArrayList<BaseItemData>()
 
@@ -28,8 +29,8 @@ class PlantVM: BaseVM() {
         showWebView.postValue((dataList[position] as PlantAreaItemData).data.E_URL)
     }
 
-    fun goDetail(position:Int){
+    fun goDetail(image: ImageView, position:Int){
         val data = PlantDetailFragData((dataList[position] as PlantListItemData).data)
-        goPlantDetail.postValue(data)
+        goPlantDetail.postValue(Pair(image,data))
     }
 }
