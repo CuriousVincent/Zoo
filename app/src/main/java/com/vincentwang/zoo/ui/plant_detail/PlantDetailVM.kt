@@ -1,11 +1,12 @@
 package com.vincentwang.zoo.ui.plant_detail
 
 import android.graphics.drawable.Drawable
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import com.bumptech.glide.request.RequestListener
 import com.vincentwang.zoo.base.BaseVM
 
-class PlantDetailVM : BaseVM() {
+class PlantDetailVM @ViewModelInject constructor() : BaseVM() {
 
     val url = MutableLiveData<String>("")
     val name = MutableLiveData<String>()

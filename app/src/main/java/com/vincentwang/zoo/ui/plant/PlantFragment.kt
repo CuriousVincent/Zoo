@@ -5,6 +5,7 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.transition.TransitionInflater
 import com.vincentwang.zoo.R
@@ -18,12 +19,11 @@ import com.vincentwang.zoo.util.startFragment
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_intro.*
 import kotlinx.android.synthetic.main.item_plant_list.view.*
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class PlantFragment : BaseFragment() {
     lateinit var binding: FragmentPlantBinding
-    private val vm by viewModel<PlantVM>()
+    private val vm by viewModels<PlantVM>()
 
     companion object {
         const val ARGUMENT_PLANT_FRAG_DATA = "argPlantFragData"
