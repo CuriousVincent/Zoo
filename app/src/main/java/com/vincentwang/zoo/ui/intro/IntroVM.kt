@@ -1,21 +1,19 @@
 package com.vincentwang.zoo.ui.intro
 
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.viewModelScope
-import com.orhanobut.logger.Logger
 import com.vincentwang.zoo.base.BaseVM
 import com.vincentwang.zoo.model.ZooRepository
-import com.vincentwang.zoo.ui.plant.PlantData
 import com.vincentwang.zoo.ui.plant.PlantFragData
 import com.vincentwang.zoo.util.CoroutineDispatcherProvider
 import com.vincentwang.zoo.util.SingleLiveEvent
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 
-class IntroVM(
+class IntroVM @ViewModelInject constructor(
     private val repo: ZooRepository,
     private val dispatchers: CoroutineDispatcherProvider
 ) : BaseVM() {

@@ -6,6 +6,7 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.transition.TransitionInflater
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -17,12 +18,11 @@ import com.vincentwang.zoo.databinding.FragmentPlantDetailBinding
 import com.vincentwang.zoo.ui.plant.ResultX
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.fragment_intro.*
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlantDetailFragment : BaseFragment() {
     lateinit var binding: FragmentPlantDetailBinding
 
-    private val vm by viewModel<PlantDetailVM>()
+    private val vm by viewModels<PlantDetailVM>()
 
 
     companion object {

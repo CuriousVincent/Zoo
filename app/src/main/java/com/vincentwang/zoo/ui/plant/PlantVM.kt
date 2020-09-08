@@ -1,11 +1,12 @@
 package com.vincentwang.zoo.ui.plant
 
 import android.widget.ImageView
+import androidx.hilt.lifecycle.ViewModelInject
 import com.vincentwang.zoo.base.BaseVM
 import com.vincentwang.zoo.ui.plant_detail.PlantDetailFragData
 import com.vincentwang.zoo.util.SingleLiveEvent
 
-class PlantVM: BaseVM() {
+class PlantVM @ViewModelInject constructor(): BaseVM() {
 
     val setTitle = SingleLiveEvent<String>()
     val setAdapter = SingleLiveEvent<List<BaseItemData>>()

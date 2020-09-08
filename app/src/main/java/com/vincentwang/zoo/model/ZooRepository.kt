@@ -6,8 +6,9 @@ import com.vincentwang.zoo.ui.plant.PlantData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.json.JSONObject
+import javax.inject.Inject
 
-class ZooRepository(private val gson: Gson, private val services: ZooServices) {
+class ZooRepository @Inject constructor(private val gson: Gson, private val services: ZooServices) {
 
 
     fun getPlant(number:Int):Flow<PlantData>{
